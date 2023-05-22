@@ -1,9 +1,0 @@
-version: '2.1'
-orbs:
-  sample: av-lasse/sample@dev:2927f9cf3cb506eff444e6b81211535f622cb9b4
-
-workflows:
-  use-my-orb:
-    jobs:
-      - sample/hello
-
