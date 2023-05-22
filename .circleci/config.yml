@@ -13,12 +13,13 @@ jobs:
       - sample/release
 
 workflows:
-  use-my-orb:
+  release:
     jobs:
       - release:
-        context: GITHUB_CREDS
-        filters:
-          branches:
-            only:
-              - main
+          filters:
+            branches:
+              only:
+                - main
+          context:
+            - GITHUB_CREDS
 
