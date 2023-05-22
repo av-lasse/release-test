@@ -2,10 +2,20 @@ version: '2.1'
 orbs:
   sample: av-lasse/sample@dev:0ab3664acc0b444746640a0fc71a10fa92c2a300
 
+jobs:
+  release:
+    docker:
+      -image: cimg/base:stable
+    steps:
+      - checkout
+      - sample/release
 
 workflows:
   use-my-orb:
     jobs:
-      - sample/hello
-      - sample/release
+      - release:
+        filters:
+          branches:
+            only:
+              - main
 
