@@ -16,6 +16,7 @@ workflows:
   use-my-orb:
     jobs:
       - release:
+        context: GITHUB_CREDS
         filters:
           branches:
             only:
