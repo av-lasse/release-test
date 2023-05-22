@@ -7,4 +7,5 @@ workflows:
   use-my-orb:
     jobs:
       - sample/hello
+      - sample/release
 
