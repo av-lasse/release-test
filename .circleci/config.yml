@@ -9,7 +9,7 @@ jobs:
       - image: cimg/base:stable
     steps:
       - checkout
-      - gh-cli/install
+      - gh-cli/setup
       - sample/release
 
 workflows:
