@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  sample: av-lasse/sample@dev:fde2f10e7e901b47580d7900bb58eb5c64ac1302
+  sample: av-lasse/sample@dev:2c1dc9311d3b137a9540990dfcb7524fbb316405
   gh-cli: circleci/github-cli@2.2.0
 
 jobs:
