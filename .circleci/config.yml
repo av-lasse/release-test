@@ -13,6 +13,16 @@ jobs:
           version: 2.29.0
       - gh-cli/setup
       - sample/release
+  build-test:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - gh-cli/install:
+          version: 2.29.0
+      - gh-cli/setup
+      - sample/release
+          
 
 workflows:
   release:
@@ -24,4 +34,10 @@ workflows:
                 - main
           context:
             - GITHUB_CREDS
-
+      - build:
+          filters:
+            branches:
+              ignore:
+                - main
+          context:
+            - GITHUB_CREDS
