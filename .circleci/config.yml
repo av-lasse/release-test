@@ -34,7 +34,7 @@ workflows:
                 - main
           context:
             - GITHUB_CREDS
-      - build:
+      - build-test:
           filters:
             branches:
               ignore:
