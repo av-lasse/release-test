@@ -24,8 +24,8 @@ workflows:
                 - main
           context:
             - GITHUB_CREDS
-  release:
-    tag:
+  tag:
+    jobs:
       - tag:
           filters:
             branches:
