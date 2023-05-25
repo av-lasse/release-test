@@ -1,7 +1,6 @@
 version: 2.1
 orbs:
-  sample: av-lasse/sample@dev:2ea180e3d9eb49a590c796b0ea635c4e252fdf91
-  gh-cli: circleci/github-cli@2.2.0
+  sample: av-lasse/sample@dev:1348e4376d7701738837a3bee1fad804b9a2089a
 
 jobs:
   release:
@@ -9,9 +8,6 @@ jobs:
       - image: cimg/base:stable
     steps:
       - checkout
-      - gh-cli/install:
-          version: 2.29.0
-      - gh-cli/setup
       - sample/release
 
 workflows:
