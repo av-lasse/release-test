@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  sample: av-lasse/sample@dev:1348e4376d7701738837a3bee1fad804b9a2089a
+  sample: av-lasse/sample@dev:f3aeccf12f28a675300ae45b08ef0e410a6aa76e
 
 jobs:
   release:
@@ -9,6 +9,12 @@ jobs:
     steps:
       - checkout
       - sample/release
+  tag:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - sample/tag
 
 workflows:
   release:
@@ -20,4 +26,12 @@ workflows:
                 - main
           context:
             - GITHUB_CREDS
-
+  tag:
+    jobs:
+      - tag:
+          filters:
+            branches:
+              ignore:
+                - main
+          context:
+            - GITHUB_CREDS
