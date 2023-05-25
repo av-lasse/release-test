@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  sample: av-lasse/sample@dev:09de85512a935ac04522037b36b6d7e0e85d04de
+  sample: av-lasse/sample@dev:1d48b76e8202818b7105c6e3f7c518f64c3c4a62
 
 jobs:
   release:
