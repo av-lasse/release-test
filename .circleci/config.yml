@@ -10,6 +10,8 @@ jobs:
       - checkout
       - sample/release
   tag:
+    docker:
+      - image: cimg/base:stable
     steps:
       - checkout
       - sample/tag
