@@ -26,6 +26,8 @@ jobs:
           name: Pull Request Job
           command: |
             # Add your pull request specific commands here
+            echo "This is the Pull Request Job"
+
   release_job:
     docker:
       - image: circleci/python:3.8
@@ -35,3 +37,4 @@ jobs:
           name: Release Job
           command: |
             # Add your release specific commands here
+            echo "This is the Release Job"
