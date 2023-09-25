@@ -1,37 +1,37 @@
 version: 2.1
-orbs:
-  sample: av-lasse/sample@dev:c9ce1373dad5f4753256e0b2005a17dbce300fe8
+workflows:
+  version: 2
+  pull_request_workflow:
+    jobs:
+      - pull_request_job:
+          filters:
+            branches:
+              only: /.*/
+            tags:
+              ignore: /.*/
+  release_workflow:
+    jobs:
+      - release_job:
+          filters:
+            tags:
+              only: /.*/
 
 jobs:
-  release:
+  pull_request_job:
     docker:
-      - image: cimg/base:stable
+      - image: circleci/python:3.8
     steps:
       - checkout
-      - sample/release
-  tag:
+      - run:
+          name: Pull Request Job
+          command: |
+            # Add your pull request specific commands here
+  release_job:
     docker:
-      - image: cimg/base:stable
+      - image: circleci/python:3.8
     steps:
       - checkout
-      - sample/tag
-
-workflows:
-  release:
-    jobs:
-      - release:
-          filters:
-            branches:
-              only:
-                - main
-          context:
-            - GITHUB_CREDS
-  tag:
-    jobs:
-      - tag:
-          filters:
-            branches:
-              ignore:
-                - main
-          context:
-            - GITHUB_CREDS
+      - run:
+          name: Release Job
+          command: |
+            # Add your release specific commands here
