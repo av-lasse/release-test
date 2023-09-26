@@ -58,7 +58,7 @@ workflows:
       - build-prod-schema:
           requires:
             - "test-api-brakeman"
-            - "test-apibundler-audit"
+            - "test-api-bundler-audit"
             - "test-api-rubocop-api"
             - "test-scan-api"
           filters:
