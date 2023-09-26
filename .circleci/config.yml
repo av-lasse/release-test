@@ -14,6 +14,8 @@ workflows:
           requires:
             - "lint-dockerfile-api"
           filters:
+            branches:
+              only: /^SPRINT.*/
             tags:
               only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+\-sc(.*)$/
       - api-rspec:
@@ -24,26 +26,32 @@ workflows:
               only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+\-sc(.*)$/
       - test-api-rubocop:
           requires:
-            - "api-rspec"
+            - "build-dev"
           filters:
             tags:
               only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+\-sc(.*)$/
       - test-api-brakeman:
           requires:
-            - "api-rspec"
+            - "build-dev"
           filters:
+            branches:
+              only: /^SPRINT.*/
             tags:
               only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+\-sc(.*)$/
       - test-api-bundler-audit:
           requires:
-            - "api-rspec"
+            - "build-dev"
           filters:
+            branches:
+              only: /^SPRINT.*/
             tags:
               only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+\-sc(.*)$/
       - test-scan-api:
           requires:
             - "build-prod"
           filters:
+            branches:
+              only: /^SPRINT.*/
             tags:
               only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+\-sc(.*)$/
       - build-dev-schema:
@@ -62,6 +70,8 @@ workflows:
             - "test-api-rubocop"
             - "test-scan-api"
           filters:
+            branches:
+              only: /^SPRINT.*/
             tags:
               only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+\-sc(.*)$/
       - tag_tested_develop:
