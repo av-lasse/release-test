@@ -69,8 +69,6 @@ workflows:
               ignore:
                 - /^SPRINT.*/
                 - /main/
-            tags:
-              only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+\-sc(.*)$/
       - build-prod-schema:
           requires:
             - "test-api-brakeman"
@@ -81,14 +79,6 @@ workflows:
           filters:
             branches:
               only: /^SPRINT.*/
-            tags:
-              only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+\-sc(.*)$/
-      - tag_tested_develop:
-          requires:
-            - "build-dev-schema"
-          filters:
-            branches:
-              ignore: /.*/
             tags:
               only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+\-sc(.*)$/
       - tag_tested_production:
@@ -191,15 +181,6 @@ jobs:
           name: Pull Request Job
           command: |
             echo "This is the build-prod-schema Job"
-  tag_tested_develop:
-    docker:
-      - image: circleci/python:3.8
-    steps:
-      - checkout
-      - run:
-          name: Pull Request Job
-          command: |
-            echo "This is the tag_tested_develop Job"
   tag_tested_production:
     docker:
       - image: circleci/python:3.8
@@ -208,4 +189,4 @@ jobs:
       - run:
           name: Pull Request Job
           command: |
-            echo "This is the tag_tested_production Job"
+            echo "docker tag your-image:latest your-image:$GIT_TAG"
