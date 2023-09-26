@@ -18,7 +18,7 @@ workflows:
             - "lint-dockerfile-api"
           filters:
             branches:
-              only: /^SPRINT.*/
+              only: /^SPRINT\/.*/
             tags:
               only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+\-sc(.*)$/
       - api-rspec:
@@ -38,7 +38,7 @@ workflows:
             - "build-dev"
           filters:
             branches:
-              only: /^SPRINT.*/
+              only: /^SPRINT\/.*/
             tags:
               only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+\-sc(.*)$/
       - test-api-bundler-audit:
@@ -46,7 +46,7 @@ workflows:
             - "build-dev"
           filters:
             branches:
-              only: /^SPRINT.*/
+              only: /^SPRINT\/.*/
             tags:
               only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+\-sc(.*)$/
       - test-scan-api:
@@ -54,7 +54,7 @@ workflows:
             - "build-prod"
           filters:
             branches:
-              only: /^SPRINT.*/
+              only: /^SPRINT\/.*/
             tags:
               only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+\-sc(.*)$/
       - build-dev-schema:
@@ -67,7 +67,7 @@ workflows:
           filters:
             branches:
               ignore:
-                - /^SPRINT.*/
+                - /^SPRINT\/.*/
                 - /main/
       - build-prod-schema:
           requires:
@@ -78,7 +78,7 @@ workflows:
             - "api-rspec"
           filters:
             branches:
-              only: /^SPRINT.*/
+              only: /^SPRINT\/.*/
             tags:
               only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+\-sc(.*)$/
       - tag_tested_production:
