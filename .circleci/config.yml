@@ -1,14 +1,6 @@
 version: 2.1
 workflows:
   version: 2
-  pull_request_workflow:
-    jobs:
-      - pull_request_job:
-          filters:
-            branches:
-              only: /.*/
-            tags:
-              ignore: /.*/
   prod_release_workflow:
     jobs:
       - prod_release_job:
@@ -23,7 +15,16 @@ workflows:
           filters:
             tags:
               only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+\-sc(.*)$/
+      - test1:
+          requires:
+            - "build"
+      - test2:
+          requires:
+            - "build"
       - sprint_release_job:
+          requires:
+            - "test1"
+            - "test2"
           filters:
             branches:
               ignore: /.*/
@@ -41,6 +42,26 @@ jobs:
           command: |
             # Add your pull request specific commands here
             echo "This is the build Job"
+  test1:
+    docker:
+      - image: circleci/python:3.8
+    steps:
+      - checkout
+      - run:
+          name: build
+          command: |
+            # Add your pull request specific commands here
+            echo "This is the test1 Job"
+  test2:
+    docker:
+      - image: circleci/python:3.8
+    steps:
+      - checkout
+      - run:
+          name: build
+          command: |
+            # Add your pull request specific commands here
+            echo "This is the test2 Job"
   pull_request_job:
     docker:
       - image: circleci/python:3.8
