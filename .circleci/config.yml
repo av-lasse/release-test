@@ -50,7 +50,7 @@ workflows:
           requires:
             - "test-api-brakeman"
             - "test-api-bundler-audit"
-            - "test-api-rubocop-api"
+            - "test-api-rubocop"
             - "test-scan-api"
           filters:
             tags:
@@ -59,7 +59,7 @@ workflows:
           requires:
             - "test-api-brakeman"
             - "test-api-bundler-audit"
-            - "test-api-rubocop-api"
+            - "test-api-rubocop"
             - "test-scan-api"
           filters:
             tags:
