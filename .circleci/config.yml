@@ -69,6 +69,7 @@ workflows:
             - "test-api-bundler-audit"
             - "test-api-rubocop"
             - "test-scan-api"
+            - "api-rspec"
           filters:
             branches:
               only: /^SPRINT.*/
