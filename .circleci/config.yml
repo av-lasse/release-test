@@ -39,4 +39,4 @@ jobs:
           name: Release Job
           command: |
             # Add your release specific commands here
-            echo "This is the Release Job"
+            echo "This is the Release Job, I will tag docker with $CIRCLE_TAG"
