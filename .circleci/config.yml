@@ -60,6 +60,7 @@ workflows:
             - "test-api-bundler-audit"
             - "test-api-rubocop"
             - "test-scan-api"
+            - "api-rspec"
           filters:
             tags:
               only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+\-sc(.*)$/
