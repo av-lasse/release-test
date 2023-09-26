@@ -11,26 +11,78 @@ workflows:
               only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+$/
   sprint_release_workflow:
     jobs:
-      - build:
+      - lint-dockerfile-api
+      - build-dev:
+          requires:
+            - "lint-dockerfile-api"
           filters:
             tags:
               only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+\-sc(.*)$/
-      - test1:
+      - build-prod:
           requires:
-            - "build"
+            - "lint-dockerfile-api"
           filters:
             tags:
               only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+\-sc(.*)$/
-      - test2:
+      - api-rspec:
           requires:
-            - "build"
+            - "build-dev"
           filters:
             tags:
               only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+\-sc(.*)$/
-      - sprint_release_job:
+      - test-api-rubocop:
           requires:
-            - "test1"
-            - "test2"
+            - "api-rspec"
+          filters:
+            tags:
+              only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+\-sc(.*)$/
+      - test-api-brakeman:
+          requires:
+            - "api-rspec"
+          filters:
+            tags:
+              only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+\-sc(.*)$/
+      - test-api-bundler-audit:
+          requires:
+            - "api-rspec"
+          filters:
+            tags:
+              only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+\-sc(.*)$/
+      - test-scan-api:
+          requires:
+            - "build-prod"
+          filters:
+            tags:
+              only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+\-sc(.*)$/
+      - build-dev-schema:
+          requires:
+            - "test-api-brakeman"
+            - "test-apibundler-audit"
+            - "test-api-rubocop-api"
+            - "test-scan-api"
+          filters:
+            tags:
+              only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+\-sc(.*)$/
+      - build-prod-schema:
+          requires:
+            - "test-api-brakeman"
+            - "test-apibundler-audit"
+            - "test-api-rubocop-api"
+            - "test-scan-api"
+          filters:
+            tags:
+              only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+\-sc(.*)$/
+      - tag_tested_develop:
+          requires:
+            - "build-dev-schema"
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+\-sc(.*)$/
+      - tag_tested_production:
+          requires:
+            - "build-prod-schema"
           filters:
             branches:
               ignore: /.*/
@@ -38,7 +90,7 @@ workflows:
               only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+\-sc(.*)$/
               
 jobs:
-  build:
+  build-dev:
     docker:
       - image: circleci/python:3.8
     steps:
@@ -46,9 +98,8 @@ jobs:
       - run:
           name: build
           command: |
-            # Add your pull request specific commands here
-            echo "This is the build Job"
-  test1:
+            echo "This is the build dev Job"
+  build-prod:
     docker:
       - image: circleci/python:3.8
     steps:
@@ -56,9 +107,8 @@ jobs:
       - run:
           name: build
           command: |
-            # Add your pull request specific commands here
-            echo "This is the test1 Job"
-  test2:
+            echo "This is the build prod Job"
+  api-rspec:
     docker:
       - image: circleci/python:3.8
     steps:
@@ -66,9 +116,17 @@ jobs:
       - run:
           name: build
           command: |
-            # Add your pull request specific commands here
-            echo "This is the test2 Job"
-  pull_request_job:
+            echo "This is the api-rspec Job"
+  test-api-brakeman:
+    docker:
+      - image: circleci/python:3.8
+    steps:
+      - checkout
+      - run:
+          name: build
+          command: |
+            echo "This is the test-api-brakeman Job"
+  test-api-bundler-audit:
     docker:
       - image: circleci/python:3.8
     steps:
@@ -76,26 +134,58 @@ jobs:
       - run:
           name: Pull Request Job
           command: |
-            # Add your pull request specific commands here
-            echo "This is the Pull Request Job"
-
-  prod_release_job:
+            echo "This is the test-api-bundler-audit Job"
+  test-api-rubocop:
     docker:
       - image: circleci/python:3.8
     steps:
       - checkout
       - run:
-          name: Release Job
+          name: Pull Request Job
           command: |
-            # Add your release specific commands here
-            echo "This is the Release Job, I will tag docker with $CIRCLE_TAG"
-  sprint_release_job:
+            echo "This is the test-api-rubocop Job"
+  test-scan-api:
     docker:
       - image: circleci/python:3.8
     steps:
       - checkout
       - run:
-          name: Release Job
+          name: Pull Request Job
           command: |
-            # Add your release specific commands here
-            echo "This is the Release Job, I will tag docker with $CIRCLE_TAG"
+            echo "This is the test-scan-api Job"
+  build-dev-schema:
+    docker:
+      - image: circleci/python:3.8
+    steps:
+      - checkout
+      - run:
+          name: Pull Request Job
+          command: |
+            echo "This is the build-dev-schema Job"
+  build-prod-schema:
+    docker:
+      - image: circleci/python:3.8
+    steps:
+      - checkout
+      - run:
+          name: Pull Request Job
+          command: |
+            echo "This is the build-prod-schema Job"
+  tag_tested_develop:
+    docker:
+      - image: circleci/python:3.8
+    steps:
+      - checkout
+      - run:
+          name: Pull Request Job
+          command: |
+            echo "This is the tag_tested_develop Job"
+  tag_tested_production:
+    docker:
+      - image: circleci/python:3.8
+    steps:
+      - checkout
+      - run:
+          name: Pull Request Job
+          command: |
+            echo "This is the tag_tested_production Job"
