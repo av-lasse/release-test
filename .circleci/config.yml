@@ -30,7 +30,7 @@ jobs:
             # Add your pull request specific commands here
             echo "This is the Pull Request Job"
 
-  release_job:
+  prod_release_job:
     docker:
       - image: circleci/python:3.8
     steps:
