@@ -3,7 +3,10 @@ workflows:
   version: 2
   sprint_release_workflow:
     jobs:
-      - lint-dockerfile-api
+      - lint-dockerfile-api:
+          filters:
+            tags:
+              only: /.*/
       - build-dev:
           requires:
             - "lint-dockerfile-api"
