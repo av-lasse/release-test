@@ -17,8 +17,27 @@ workflows:
               ignore: /.*/
             tags:
               only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+$/
-
+  sprint_release_workflow:
+    jobs:
+      - build:
+      - sprint_release_job:
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+\-sc(.*)$/
+              
 jobs:
+  build:
+  docker:
+      - image: circleci/python:3.8
+    steps:
+      - checkout
+      - run:
+          name: build
+          command: |
+            # Add your pull request specific commands here
+            echo "This is the build Job"
   pull_request_job:
     docker:
       - image: circleci/python:3.8
@@ -31,6 +50,16 @@ jobs:
             echo "This is the Pull Request Job"
 
   prod_release_job:
+    docker:
+      - image: circleci/python:3.8
+    steps:
+      - checkout
+      - run:
+          name: Release Job
+          command: |
+            # Add your release specific commands here
+            echo "This is the Release Job, I will tag docker with $CIRCLE_TAG"
+  sprint_release_job:
     docker:
       - image: circleci/python:3.8
     steps:
