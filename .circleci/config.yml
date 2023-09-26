@@ -9,12 +9,14 @@ workflows:
               only: /.*/
             tags:
               ignore: /.*/
-  release_workflow:
+  prod_release_workflow:
     jobs:
-      - release_job:
+      - prod_release_job:
           filters:
+            branches:
+              ignore: /.*/
             tags:
-              only: /.*/
+              only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+$/
 
 jobs:
   pull_request_job:
@@ -28,7 +30,7 @@ jobs:
             # Add your pull request specific commands here
             echo "This is the Pull Request Job"
 
-  release_job:
+  prod_release_job:
     docker:
       - image: circleci/python:3.8
     steps:
