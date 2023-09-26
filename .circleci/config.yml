@@ -19,7 +19,10 @@ workflows:
               only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+$/
   sprint_release_workflow:
     jobs:
-      - build
+      - build:
+          filters:
+            tags:
+              only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+\-sc(.*)$/
       - sprint_release_job:
           filters:
             branches:
