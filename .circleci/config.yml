@@ -1,14 +1,6 @@
 version: 2.1
 workflows:
   version: 2
-  prod_release_workflow:
-    jobs:
-      - prod_release_job:
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+$/
   sprint_release_workflow:
     jobs:
       - lint-dockerfile-api
