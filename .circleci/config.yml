@@ -91,7 +91,6 @@ jobs:
           name: build
           command: |
             echo "This is the lint lint-dockerfile-api Job"
-jobs:
   build-dev:
     docker:
       - image: circleci/python:3.8
