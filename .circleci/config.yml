@@ -13,6 +13,8 @@ workflows:
     jobs:
       - release_job:
           filters:
+            branches:
+              ignore: /.*/
             tags:
               only: /.*/
 
