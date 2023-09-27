@@ -1,7 +1,7 @@
 version: 2.1
 
 filters: 
-  - &semver_tags
+  - &common_filter
     tags:
       only: /^v[0-9]+\.[0-9]+\.[0-9]+(-(sc|rc).*)?$/
   - &sprint_filter
@@ -9,8 +9,6 @@ filters:
       only: /^SPRINT\/.*/
     tags:
       only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+(?:-(sc|rc).*)?$/
-
-
 
 workflows:
   version: 2
@@ -23,7 +21,7 @@ workflows:
       - build-dev:
           requires:
             - "lint-dockerfile-api"
-          filters: *semver_tags
+          filters: *common_filter
       - build-prod:
           requires:
             - "lint-dockerfile-api"
@@ -31,39 +29,23 @@ workflows:
       - api-rspec:
           requires:
             - "build-dev"
-          filters:
-            tags:
-              only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+(?:-(sc|rc).*)?$/
+          filters: *common_filter
       - test-api-rubocop:
           requires:
             - "build-dev"
-          filters:
-            tags:
-              only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+(?:-(sc|rc).*)?$/
+          filters: *common_filter
       - test-api-brakeman:
           requires:
             - "build-dev"
-          filters:
-            branches:
-              only: /^SPRINT\/.*/
-            tags:
-              only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+(?:-(sc|rc).*)?$/
+          filters: *sprint_filter
       - test-api-bundler-audit:
           requires:
             - "build-dev"
-          filters:
-            branches:
-              only: /^SPRINT\/.*/
-            tags:
-              only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+(?:-(sc|rc).*)?$/
+          filters: *sprint_filter
       - test-scan-api:
           requires:
             - "build-prod"
-          filters:
-            branches:
-              only: /^SPRINT\/.*/
-            tags:
-              only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+(?:-(sc|rc).*)?$/
+          filters: *sprint_filter
       - build-dev-schema:
           requires:
             - "test-api-brakeman"
@@ -83,11 +65,7 @@ workflows:
             - "test-api-rubocop"
             - "test-scan-api"
             - "api-rspec"
-          filters:
-            branches:
-              only: /^SPRINT\/.*/
-            tags:
-              only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+(?:-(sc|rc).*)?$/
+          filters: *sprint_filter
       - tag_tested_production:
           requires:
             - "build-prod-schema"
@@ -100,7 +78,7 @@ workflows:
 jobs:
   lint-dockerfile-api:
     docker:
-      - image: circleci/python:3.8
+      - image: cimg/python:3.8
     steps:
       - checkout
       - run:
@@ -109,7 +87,7 @@ jobs:
             echo "This is the lint lint-dockerfile-api Job"
   build-dev:
     docker:
-      - image: circleci/python:3.8
+      - image: cimg/python:3.8
     steps:
       - checkout
       - run:
@@ -118,7 +96,7 @@ jobs:
             echo "This is the build dev Job"
   build-prod:
     docker:
-      - image: circleci/python:3.8
+      - image: cimg/python:3.8
     steps:
       - checkout
       - run:
@@ -127,7 +105,7 @@ jobs:
             echo "This is the build prod Job"
   api-rspec:
     docker:
-      - image: circleci/python:3.8
+      - image: cimg/python:3.8
     steps:
       - checkout
       - run:
@@ -136,7 +114,7 @@ jobs:
             echo "This is the api-rspec Job"
   test-api-brakeman:
     docker:
-      - image: circleci/python:3.8
+      - image: cimg/python:3.8
     steps:
       - checkout
       - run:
@@ -145,7 +123,7 @@ jobs:
             echo "This is the test-api-brakeman Job"
   test-api-bundler-audit:
     docker:
-      - image: circleci/python:3.8
+      - image: cimg/python:3.8
     steps:
       - checkout
       - run:
@@ -154,7 +132,7 @@ jobs:
             echo "This is the test-api-bundler-audit Job"
   test-api-rubocop:
     docker:
-      - image: circleci/python:3.8
+      - image: cimg/python:3.8
     steps:
       - checkout
       - run:
@@ -163,7 +141,7 @@ jobs:
             echo "This is the test-api-rubocop Job"
   test-scan-api:
     docker:
-      - image: circleci/python:3.8
+      - image: cimg/python:3.8
     steps:
       - checkout
       - run:
@@ -172,7 +150,7 @@ jobs:
             echo "This is the test-scan-api Job"
   build-dev-schema:
     docker:
-      - image: circleci/python:3.8
+      - image: cimg/python:3.8
     steps:
       - checkout
       - run:
@@ -181,7 +159,7 @@ jobs:
             echo "This is the build-dev-schema Job"
   build-prod-schema:
     docker:
-      - image: circleci/python:3.8
+      - image: cimg/python:3.8
     steps:
       - checkout
       - run:
@@ -190,7 +168,7 @@ jobs:
             echo "This is the build-prod-schema Job"
   tag_tested_production:
     docker:
-      - image: circleci/python:3.8
+      - image: cimg/python:3.8
     steps:
       - checkout
       - run:
