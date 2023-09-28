@@ -24,8 +24,6 @@ workflows:
             tags:
               only: /.*/
       - build-image:
-          parameters:
-            rails-env: "development"
           requires:
             - "lint-dockerfile-api"
           filters: *common_filter
@@ -95,9 +93,6 @@ jobs:
   build-image:
     docker:
       - image: cimg/python:3.8
-    parameters: 
-      rails-env:
-        type: string
     steps:
       - checkout
       - run:
