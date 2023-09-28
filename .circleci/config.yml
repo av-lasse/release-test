@@ -10,11 +10,6 @@ filters:
     tags:
       only: /^v([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9])+(?:-(sc|rc).*)?$/
 
-parameters:
-  rails-env:
-    type: string
-    default: "production"
-
 workflows:
   version: 2
   sprint_release_workflow:
@@ -24,6 +19,7 @@ workflows:
             tags:
               only: /.*/
       - build-image:
+          rails-env: development
           requires:
             - "lint-dockerfile-api"
           filters: *common_filter
@@ -91,6 +87,9 @@ jobs:
           command: |
             echo "This is the lint lint-dockerfile-api Job"
   build-image:
+    parameters:
+      rails-env:
+        type: string
     docker:
       - image: cimg/python:3.8
     steps:
