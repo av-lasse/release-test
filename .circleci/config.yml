@@ -24,7 +24,8 @@ workflows:
             tags:
               only: /.*/
       - build-image:
-          rails-env: "development"
+          parameters:
+            rails-env: "development"
           requires:
             - "lint-dockerfile-api"
           filters: *common_filter
@@ -102,7 +103,7 @@ jobs:
       - run:
           name: build
           command: |
-            echo "This is the build Job for <<rails-env>>"
+            echo "This is the build Job for << pipeline.parameters.rails-env >>"
   build-dev:
     docker:
       - image: cimg/python:3.8
