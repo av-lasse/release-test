@@ -24,8 +24,7 @@ workflows:
             tags:
               only: /.*/
       - build-image:
-          parameters:
-            rails-env: "development"
+          rails-env: "development"
           requires:
             - "lint-dockerfile-api"
           filters: *common_filter
