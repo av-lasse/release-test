@@ -18,8 +18,7 @@ workflows:
           filters:
             tags:
               only: /.*/
-      - build-image:
-          rails_env: development
+      - build-dev:
           requires:
             - "lint-dockerfile-api"
           filters: *common_filter
@@ -29,19 +28,19 @@ workflows:
           filters: *sprint_filter
       - api-rspec:
           requires:
-            - "build-image"
+            - "build-dev"
           filters: *common_filter
       - test-api-rubocop:
           requires:
-            - "build-image"
+            - "build-dev"
           filters: *common_filter
       - test-api-brakeman:
           requires:
-            - "build-image"
+            - "build-dev"
           filters: *sprint_filter
       - test-api-bundler-audit:
           requires:
-            - "build-image"
+            - "build-dev"
           filters: *sprint_filter
       - test-scan-api:
           requires:
@@ -86,18 +85,6 @@ jobs:
           name: build
           command: |
             echo "This is the lint lint-dockerfile-api Job"
-  build-image:
-    parameters:
-      rails_env:
-        type: string
-    docker:
-      - image: cimg/python:3.8
-    steps:
-      - checkout
-      - run:
-          name: build
-          command: |
-            echo "This is the build Job for << parameters.rails_env >>"
   build-dev:
     docker:
       - image: cimg/python:3.8
