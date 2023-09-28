@@ -95,6 +95,8 @@ jobs:
   build-image:
     docker:
       - image: cimg/python:3.8
+    parameters: 
+      rails-env: <<parameters.rails-env>>
     steps:
       - checkout
       - run:
