@@ -33,19 +33,19 @@ workflows:
           filters: *sprint_filter
       - api-rspec:
           requires:
-            - "build-dev"
+            - "build-image"
           filters: *common_filter
       - test-api-rubocop:
           requires:
-            - "build-dev"
+            - "build-image"
           filters: *common_filter
       - test-api-brakeman:
           requires:
-            - "build-dev"
+            - "build-image"
           filters: *sprint_filter
       - test-api-bundler-audit:
           requires:
-            - "build-dev"
+            - "build-image"
           filters: *sprint_filter
       - test-scan-api:
           requires:
