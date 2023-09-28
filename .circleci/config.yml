@@ -25,12 +25,12 @@ workflows:
             tags:
               only: /.*/
       - build-dev:
-          <<: *parmeters.development
+          <<: *parameters.development
           requires:
             - "lint-dockerfile-api"
           filters: *common_filter
       - build-prod:
-          <<: *parmeters.production
+          <<: *parameters.production
           requires:
             - "lint-dockerfile-api"
           filters: *sprint_filter
